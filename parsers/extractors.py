@@ -10,32 +10,25 @@ class MessageExtractor:
 
     def get_header_info(self, key) -> str:
         """Extract key info from the message object."""
-        return self.message.get(name=key)
+        if self.message:
+            return self.message.get(name=key)
+        return ''
 
-    def get_body_info(self) -> list:
+    def get_body_info(self) -> dict:
         """Extract body info from the message object.
 
         Extracting body info is different from the header info extraction.
         Because it may need to handle the multipart problem.
         """
-        results = []
-        for payload in self.message.get_payload():
-            # Sometimes the inner payload can be a list.
-            # So, for list only the first element will be picked.
-            if isinstance(payload, list):
-                results.append(self.get_payload_in_string(payload[0]))
-            else:
-                results.append(self.get_payload_in_string(payload))
-        return results
-
-    def get_payload_in_string(self, payload: Message) -> str:
-        """Search upto N terms to find string format of a payload."""
-        if isinstance(payload, str):
-            return payload
-        elif isinstance(payload, list):
-            return self.get_payload_in_string(payload[0].get_payload())
-        else:
-            return self.get_payload_in_string(payload.get_payload())
+        data = {}
+        if self.message:
+            for payload in self.message.get_payload():
+                for part in payload.walk():
+                    if part.is_multipart() is False:
+                        key = part.get_content_type()
+                        data[key] = []
+                        data[key].append(part.get_payload())
+        return data
 
     def extract(self, *fields) -> dict:
         """Extract selected fields information from the message object."""
@@ -47,6 +40,6 @@ class MessageExtractor:
                 results[field] = self.get_body_info()
         return results
 
-    def __init__(self, message: Message) -> None:
+    def __init__(self, message: Message | None = None) -> None:
         """Default constructor method."""
         self.message = message

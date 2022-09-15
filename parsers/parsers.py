@@ -1,22 +1,32 @@
-"""Main parsing scripts."""
-from email import policy
-from email.message import Message
-from email.parser import Parser
+"""Email parsers main classes.
+
+Import these classes according to need and get parsed results.
+First initiate the appropriate class and then call the 'get_results' method
+to get results.
+"""
+from email import policy as plc
+
+# Local import
+from parsers.readers import EmailParser
+from parsers.extractors import MessageExtractor
 
 
-class EmailParser:
-    """Base email file parser class.
+class Parser:
+    """Base parser class."""
 
-    The primary responsibility of this class is to parse an email message
-    from a file and return output as a Message object."""
+    def parse_email(self, *fields) -> dict:
+        """Parse email components."""
+        self.messageExtractor.message = self.emailParser.parse()
+        return self.messageExtractor.extract(*fields)
 
-    def parse(self) -> Message:
-        """Parse email contents from file object and convert it into a message object."""
-        return self.parser.parse(self.file)
+    def get_results(self, *fields) -> dict:
+        """Return results.
 
-    def __init__(self, file_path: str, encoding: str = "locale") -> None:
-        """Default constructor method."""
-        self.file = open(file=file_path, mode='r', encoding=encoding)
-        self.encoding = encoding
-        self.parser = Parser(policy=policy.default)
+        The base class return results for console output.
+        """
+        return self.parse_email(*fields)
 
+    def __init__(self, file_path: str, encoding: str, policy: plc) -> None:
+        """Default constructor class."""
+        self.emailParser = EmailParser(file_path, encoding, policy)
+        self.messageExtractor = MessageExtractor()
