@@ -52,11 +52,3 @@ class MessageExtractor:
     def __init__(self, message: Message) -> None:
         """Default constructor method."""
         self.message = message
-
-
-def test():
-    ps = EmailParser('media/uploaded/Test 2.eml')
-    ts = ps.parse()
-    ms = MessageExtractor(ts)
-    print(ms.extract('subject', 'from', 'to', 'body'))
-    return ts
