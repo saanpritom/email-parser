@@ -1,8 +1,6 @@
 """Extract and process various data from Message object."""
 from email.message import Message
 
-from parsers.parsers import EmailParser
-
 
 class MessageExtractor:
     """Base message extractor class.
