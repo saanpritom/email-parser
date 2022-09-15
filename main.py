@@ -1,22 +1,28 @@
-# This is a sample Python script.
+"""The example application where the parsers package will be run.
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+Here the following kinds of demonstrations are given:
+ -> Console based output
+ -> Plain text file output
+ -> HTML file output.
+"""
 
 from parsers import parse_email
 
-def print_hi():
-    # Use a breakpoint in the code line below to debug your script.
-    print(parse_email('media/uploaded/Test 2.eml'))
-    print(parse_email('media/uploaded/Automatic reply_ 122_ 122.eml'))
-    print(parse_email('media/uploaded/test oindri 10.42 am.eml'))
+email_file_one = 'media/uploaded/Automatic reply_ 122_ 122.eml'
+email_file_two = 'media/uploaded/test oindri 10.42 am.eml'
+email_file_three = 'media/uploaded/Test 2.eml'
+
+
+def print_on_console():
+    """Print results directly on the console."""
+    print(parse_email(email_file_one))
+    print(parse_email(email_file_two))
+    print(parse_email(email_file_three))
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi()
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    print_on_console()
 
 
 
