@@ -14,17 +14,17 @@ from parsers.extractors import MessageExtractor
 class Parser:
     """Base parser class."""
 
-    def parse_email(self, *fields) -> dict:
+    def parse_email(self, fields: list) -> dict:
         """Parse email components."""
         self.messageExtractor.message = self.emailParser.parse()
-        return self.messageExtractor.extract(*fields)
+        return self.messageExtractor.extract(fields)
 
-    def get_results(self, *fields) -> dict:
+    def get_results(self, fields: list) -> dict:
         """Return results.
 
         The base class return results for console output.
         """
-        return self.parse_email(*fields)
+        return self.parse_email(fields)
 
     def __init__(self, file_path: str, encoding: str, policy: plc) -> None:
         """Default constructor class."""

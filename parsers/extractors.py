@@ -30,7 +30,7 @@ class MessageExtractor:
                         data[key].append(part.get_payload())
         return data
 
-    def extract(self, *fields) -> dict:
+    def extract(self, fields: list) -> dict:
         """Extract selected fields information from the message object."""
         results = {}
         for field in fields:
