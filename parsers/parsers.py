@@ -7,9 +7,10 @@ to get results.
 from email import policy as plc
 
 # Local import
-from parsers.scripts import get_file_name, execute_writing_to_file
+from parsers.scripts import get_file_name
 from parsers.readers import EmailParser
 from parsers.extractors import MessageExtractor
+from parsers.formatters import FileWriteFormatter
 
 
 class Parser:
@@ -46,7 +47,8 @@ class FileParser(Parser):
         """Write data to a text file and returns the file's path."""
         file_name = self.output_file_dir + '/' + get_file_name(data) + self.file_extension
         fp = open(file_name, 'w')
-        execute_writing_to_file(fp, data)
+        writer = FileWriteFormatter(fp, data, self.file_extension.split('.')[1])
+        writer.write()
         fp.close()
         return file_name
 
