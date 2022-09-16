@@ -32,7 +32,40 @@ class FileWriteFormatter:
 
     def write_in_html_format(self) -> None:
         """Write file in a html format."""
-        pass
+        for key, value in self.data.items():
+            self.file_obj.write('<html>')
+            self.file_obj.write('<head>')
+            if key != 'attachment' and key != 'body':
+                self.file_obj.write('<p>')
+                self.file_obj.write(key + ': ' + value)
+                self.file_obj.write('</p><br/>')
+            self.file_obj.write('</head>')
+            self.file_obj.write('<body>')
+            self.file_obj.write('<div class="body">')
+            if key == 'body':
+                if isinstance(value, str):
+                    self.file_obj.write(key + ': ' + value)
+                    self.file_obj.write('<br/>')
+                elif isinstance(value, list):
+                    self.file_obj.write(key + ':<br/>------------<br/>')
+                    for item in value:
+                        self.file_obj.write(item)
+                    self.file_obj.write('<br/>---------------<br/>')
+            self.file_obj.write('</div>')
+            self.file_obj.write('<div class="attachment">')
+            if key == 'attachment':
+                self.file_obj.write('<br/>------------<br/>')
+                self.file_obj.write('<strong>attachments:</strong>')
+                for item in self.data['attachment']:
+                    for attach_key, attach_value in item.items():
+                        self.file_obj.write(attach_key + ':<br/>------------<br/>')
+                        for dt in attach_value:
+                            self.file_obj.write(dt)
+                        self.file_obj.write('<br/>---------------<br/>')
+            self.file_obj.write('<br/>------------<br/>')
+            self.file_obj.write('</div>')
+        self.file_obj.write('</body>')
+        self.file_obj.write('</html>')
 
     def write(self) -> None:
         """Perform the write operation."""
