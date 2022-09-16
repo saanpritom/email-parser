@@ -47,7 +47,7 @@ class FileParser(Parser):
         """Write data to a text file and returns the file's path."""
         file_name = self.output_file_dir + '/' + get_file_name(data) + self.file_extension
         fp = open(file_name, 'w')
-        writer = FileWriteFormatter(fp, data, self.file_extension.split('.')[1])
+        writer = FileWriteFormatter(fp, data, self.file_extension.split('.')[1], self.output_file_dir)
         writer.write()
         fp.close()
         return file_name

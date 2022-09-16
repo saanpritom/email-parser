@@ -1,6 +1,8 @@
 """File writing formatter classes."""
 import fileinput
 
+from parsers.scripts import build_image_from_text
+
 
 class FileWriteFormatter:
     """File write formatter class.
@@ -63,7 +65,9 @@ class FileWriteFormatter:
                         self.file_obj.write('<br/><br/>')
                         self.file_obj.write(attach_key + ':<br/>------------<br/>')
                         for dt in attach_value:
-                            self.file_obj.write(dt)
+                            build_image_from_text(self.output_dir, attach_key, dt)
+                            self.file_obj.write('<img src="' + build_image_from_text(self.output_dir, attach_key, dt)
+                                                + '" width="150px" height="90px">')
                         self.file_obj.write('<br/>---------------<br/>')
         self.file_obj.write('<br/>------------<br/>')
         self.file_obj.write('</div>')
@@ -76,15 +80,21 @@ class FileWriteFormatter:
             self.write_in_text_format()
         self.write_in_html_format()
 
-    def __init__(self, file_obj: fileinput, data: dict, format_type: str | None = 'txt') -> None:
+    def __init__(self, file_obj: fileinput, data: dict, format_type: str | None = 'txt',
+                 output_dir: str | None = None) -> None:
         """Default constructor class.
 
         This class need to initiate with a file object with 'w' right access,
         a data dict contains the data to write and a format type in which format the data
         will be formatted.
         The valid value of the format_type is either 'txt' which is default or 'html'.
+        The value of output_dir must be given for html format type.
         """
         self.file_obj = file_obj
         self.data = data
         self.format_type = format_type
+        self.output_dir = output_dir
+        if self.format_type != 'html' and not self.output_dir:
+            raise ValueError('output_dir value is necessary for not txt type.')
+
 
